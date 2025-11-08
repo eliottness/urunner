@@ -1,0 +1,24 @@
+{{- if .Values.serviceAccount.create -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "urunner.clusterRoleName" . }}
+  labels:
+    {{- include "urunner.labels" . | nindent 4 }}
+rules:
+# Permission to list namespaces with label selector "urunner=enable"
+- apiGroups: [""]
+  resources:
+    - namespaces
+  verbs:
+    - get
+    - list
+# Permission to list and patch deployments in namespaces
+- apiGroups: ["apps"]
+  resources:
+    - deployments
+  verbs:
+    - get
+    - list
+    - patch
+{{- end }}
